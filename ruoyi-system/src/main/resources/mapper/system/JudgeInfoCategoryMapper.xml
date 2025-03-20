@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.JudgeInfoCategoryMapper">
+    
+    <resultMap type="JudgeInfoCategory" id="JudgeInfoCategoryResult">
+        <result property="judgeId"    column="judge_id"    />
+        <result property="categoryId"    column="category_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectJudgeInfoCategoryVo">
+        select judge_id, category_id, create_by, create_time from judge_info_category
+    </sql>
+
+    <select id="selectJudgeInfoCategoryList" parameterType="JudgeInfoCategory" resultMap="JudgeInfoCategoryResult">
+        <include refid="selectJudgeInfoCategoryVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectJudgeInfoCategoryByJudgeId" parameterType="Long" resultMap="JudgeInfoCategoryResult">
+        <include refid="selectJudgeInfoCategoryVo"/>
+        where judge_id = #{judgeId}
+    </select>
+
+    <select id="selectJudgeInfoCategoryByCategoryId" parameterType="Long" resultMap="JudgeInfoCategoryResult">
+        <include refid="selectJudgeInfoCategoryVo"/>
+        where category_id = #{categoryId}
+    </select>
+
+    <insert id="insertJudgeInfoCategory" parameterType="JudgeInfoCategory">
+        insert into judge_info_category
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="judgeId != null">judge_id,</if>
+            <if test="categoryId != null">category_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="judgeId != null">#{judgeId},</if>
+            <if test="categoryId != null">#{categoryId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateJudgeInfoCategory" parameterType="JudgeInfoCategory">
+        update judge_info_category
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where judge_id = #{judgeId}
+    </update>
+
+    <delete id="deleteJudgeInfoCategoryByJudgeId" parameterType="Long">
+        delete from judge_info_category where judge_id = #{judgeId}
+    </delete>
+
+    <delete id="deleteJudgeInfoCategoryByJudgeIds" parameterType="String">
+        delete from judge_info_category where judge_id in 
+        <foreach item="judgeId" collection="array" open="(" separator="," close=")">
+            #{judgeId}
+        </foreach>
+    </delete>
+</mapper>

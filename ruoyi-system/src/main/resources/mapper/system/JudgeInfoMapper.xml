@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.JudgeInfoMapper">
+    
+    <resultMap type="JudgeInfo" id="JudgeInfoResult">
+        <result property="id"    column="id"    />
+        <result property="judgeName"    column="judge_name"    />
+        <result property="workLocation"    column="work_location"    />
+        <result property="contactInformation"    column="contact_information"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+    </resultMap>
+
+    <sql id="selectJudgeInfoVo">
+        select id, judge_name, work_location, contact_information, create_time, create_by, update_time, update_by from judge_info
+    </sql>
+
+    <select id="selectJudgeInfoList" parameterType="JudgeInfo" resultMap="JudgeInfoResult">
+        <include refid="selectJudgeInfoVo"/>
+        <where>  
+            <if test="judgeName != null  and judgeName != ''"> and judge_name like concat('%', #{judgeName}, '%')</if>
+            <if test="workLocation != null  and workLocation != ''"> and work_location = #{workLocation}</if>
+            <if test="contactInformation != null  and contactInformation != ''"> and contact_information = #{contactInformation}</if>
+        </where>
+    </select>
+
+    <select id="selectJudgeInfoByJudgeInfo" parameterType="JudgeInfo" resultMap="JudgeInfoResult">
+        <include refid="selectJudgeInfoVo"/>
+        <where>
+            <if test="judgeName != null  and judgeName != ''"> and judge_name =  #{judgeName}</if>
+            <if test="workLocation != null  and workLocation != ''"> and work_location = #{workLocation}</if>
+            <if test="contactInformation != null  and contactInformation != ''"> and contact_information = #{contactInformation}</if>
+        </where>
+    </select>
+    
+    <select id="selectJudgeInfoById" parameterType="Long" resultMap="JudgeInfoResult">
+        <include refid="selectJudgeInfoVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectJudgeInfoByIds" resultType="String" resultMap="JudgeInfoResult">
+        <include refid="selectJudgeInfoVo"/> where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+
+    <insert id="insertJudgeInfo" parameterType="JudgeInfo">
+        insert into judge_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="judgeName != null and judgeName != ''">judge_name,</if>
+            <if test="workLocation != null">work_location,</if>
+            <if test="contactInformation != null and contactInformation != ''">contact_information,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updateBy != null">update_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="judgeName != null and judgeName != ''">#{judgeName},</if>
+            <if test="workLocation != null">#{workLocation},</if>
+            <if test="contactInformation != null and contactInformation != ''">#{contactInformation},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+         </trim>
+    </insert>
+
+    <update id="updateJudgeInfo" parameterType="JudgeInfo">
+        update judge_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="judgeName != null and judgeName != ''">judge_name = #{judgeName},</if>
+            <if test="workLocation != null">work_location = #{workLocation},</if>
+            <if test="contactInformation != null and contactInformation != ''">contact_information = #{contactInformation},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="updateByJudgeInfo" parameterType="JudgeInfo">
+        update judge_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="judgeName != null and judgeName != ''">judge_name = #{judgeName},</if>
+            <if test="workLocation != null">work_location = #{workLocation},</if>
+            <if test="contactInformation != null and contactInformation != ''">contact_information = #{contactInformation},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+        </trim>
+        where judge_name = #{judgeName}
+    </update>
+
+    <delete id="deleteJudgeInfoById" parameterType="Long">
+        delete from judge_info where id = #{id}
+    </delete>
+
+    <delete id="deleteJudgeInfoByIds" parameterType="String">
+        delete from judge_info where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

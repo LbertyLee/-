@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.ProjectJudgeMapper">
+    
+    <resultMap type="ProjectJudge" id="ProjectJudgeResult">
+        <result property="projectId"    column="project_id"    />
+        <result property="judgeId"    column="judge_id"    />
+        <result property="state"    column="state"    />
+        <result property="remarks"    column="remarks"    />
+    </resultMap>
+
+    <sql id="selectProjectJudgeVo">
+        select project_id, judge_id, state, remarks from project_judge
+    </sql>
+
+    <select id="selectProjectJudgeList" parameterType="ProjectJudge" resultMap="ProjectJudgeResult">
+        <include refid="selectProjectJudgeVo"/>
+        <where>  
+            <if test="state != null "> and state = #{state}</if>
+            <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
+            <if test="projectId != null  and projectId != ''"> and project_id = #{projectId}</if>
+        </where>
+    </select>
+    
+    <select id="selectProjectJudgeByProjectId" parameterType="Long" resultMap="ProjectJudgeResult">
+        <include refid="selectProjectJudgeVo"/>
+        where project_id = #{projectId}
+    </select>
+
+    <insert id="insertProjectJudge" parameterType="ProjectJudge">
+        insert into project_judge
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">project_id,</if>
+            <if test="judgeId != null">judge_id,</if>
+            <if test="state != null">state,</if>
+            <if test="remarks != null">remarks,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">#{projectId},</if>
+            <if test="judgeId != null">#{judgeId},</if>
+            <if test="state != null">#{state},</if>
+            <if test="remarks != null">#{remarks},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProjectJudge" parameterType="ProjectJudge">
+        update project_judge
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="state != null">state = #{state},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+        </trim>
+        where project_id = #{projectId} and judge_id=#{judgeId}
+    </update>
+
+    <delete id="deleteProjectJudgeByProjectId" parameterType="Long">
+        delete from project_judge where project_id = #{projectId}
+    </delete>
+
+    <delete id="deleteProjectJudgeByProjectIds" parameterType="String">
+        delete from project_judge where project_id in 
+        <foreach item="projectId" collection="array" open="(" separator="," close=")">
+            #{projectId}
+        </foreach>
+    </delete>
+</mapper>
