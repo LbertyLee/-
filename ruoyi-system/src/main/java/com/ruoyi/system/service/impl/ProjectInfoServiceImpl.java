@@ -249,7 +249,7 @@ public class ProjectInfoServiceImpl implements IProjectInfoService
             projectJudges1.setRemarks("补录");
             projectJudgeService.insertProjectJudge(projectJudges1);
         }
-        return 1;
+        return selectedJudgeIds.size();
     }
 
     /**

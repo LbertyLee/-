@@ -111,7 +111,7 @@ public class ProjectInfoController extends BaseController
      */
     @PostMapping("/supplemental")
     public AjaxResult supplementalJudge(@RequestBody ProjectInfo projectInfo){
-        return toAjax(projectInfoService.supplementalJudge(projectInfo));
+        return success(projectInfoService.supplementalJudge(projectInfo));
     }
     /**
      * 下载项目确认书
