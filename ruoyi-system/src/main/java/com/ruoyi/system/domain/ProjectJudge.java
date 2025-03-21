@@ -21,8 +21,8 @@ public class ProjectJudge extends BaseEntity
     /** 专家id */
     private Long judgeId;
 
-    /** 到场状态（1：到场 0：未到场） */
-    @Excel(name = "到场状态", readConverterExp = "1=：到场,0=：未到场")
+    /** 到场状态（1：到场 0：能到场 2:不能到场） */
+    @Excel(name = "到场状态", readConverterExp = "1：到场 0：能到场 2:不能到场")
     private Integer state;
 
     /** 备注 */
