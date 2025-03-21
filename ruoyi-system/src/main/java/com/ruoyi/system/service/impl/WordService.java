@@ -148,7 +148,7 @@ public class WordService {
                 // 抽取人签名 & 参与人员签名行设置更大高度
                 row.setHeight(3000);
             } else {
-                row.setHeight(400);
+                row.setHeight(800);
             }
         }
 
