@@ -81,6 +81,15 @@ public class JudgeCategoryServiceImpl implements IJudgeCategoryService
     @Override
     public int deleteJudgeCategoryByIds(Long[] ids)
     {
+        // 当存在子分类时不能直接删除
+        for (Long id : ids) {
+            JudgeCategory judgeCategory = new JudgeCategory();
+            judgeCategory.setParentId(id);
+            List<JudgeCategory> judgeCategories = judgeCategoryMapper.selectJudgeCategoryList(judgeCategory);
+            if (!judgeCategories.isEmpty()) {
+                throw  new RuntimeException("存在子标题不能直接删除");
+            }
+        }
         return judgeCategoryMapper.deleteJudgeCategoryByIds(ids);
     }
 
