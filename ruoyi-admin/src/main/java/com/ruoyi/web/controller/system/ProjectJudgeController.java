@@ -49,7 +49,7 @@ public class ProjectJudgeController extends BaseController
     /**
      * 导出【请填写功能名称】列表
      */
-    @PreAuthorize("@ss.hasPermi('system:judge:export')")
+//    @PreAuthorize("@ss.hasPermi('system:judge:export')")
     @Log(title = "【请填写功能名称】", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, ProjectJudge projectJudge)
@@ -73,7 +73,7 @@ public class ProjectJudgeController extends BaseController
      * 新增【请填写功能名称】
      */
 //    @PreAuthorize("@ss.hasPermi('system:judge:add')")
-    @Log(title = "【请填写功能名称】", businessType = BusinessType.INSERT)
+//    @Log(title = "【请填写功能名称】", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody ProjectJudge projectJudge)
     {
@@ -84,7 +84,7 @@ public class ProjectJudgeController extends BaseController
      * 修改【请填写功能名称】
      */
 //    @PreAuthorize("@ss.hasPermi('system:judge:edit')")
-    @Log(title = "【请填写功能名称】", businessType = BusinessType.UPDATE)
+//    @Log(title = "【请填写功能名称】", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody ProjectJudge projectJudge)
     {
@@ -94,8 +94,8 @@ public class ProjectJudgeController extends BaseController
     /**
      * 删除【请填写功能名称】
      */
-    @PreAuthorize("@ss.hasPermi('system:judge:remove')")
-    @Log(title = "【请填写功能名称】", businessType = BusinessType.DELETE)
+//    @PreAuthorize("@ss.hasPermi('system:judge:remove')")
+//    @Log(title = "【请填写功能名称】", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{projectIds}")
     public AjaxResult remove(@PathVariable Long[] projectIds)
     {

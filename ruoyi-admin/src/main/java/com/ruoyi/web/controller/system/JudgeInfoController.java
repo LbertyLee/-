@@ -44,10 +44,10 @@ public class JudgeInfoController extends BaseController
      */
     @Log(title = "【请填写功能名称】", businessType = BusinessType.EXPORT)
     @GetMapping("/list")
-    public TableDataInfo list(JudgeInfo judgeInfo)
+    public TableDataInfo list(JudgeInfoBO judgeInfoBO)
     {
         startPage();
-        List<JudgeInfo> list = judgeInfoService.selectJudgeInfoList(judgeInfo);
+        List<JudgeInfo> list = judgeInfoService.selectJudgeInfoVOList(judgeInfoBO);
         return getDataTable(list);
     }
 
@@ -71,7 +71,7 @@ public class JudgeInfoController extends BaseController
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
-        return success(judgeInfoService.selectJudgeInfoById(id));
+        return success(judgeInfoService.selectJudgeInfoVOById(id));
     }
 
     /**
@@ -85,17 +85,17 @@ public class JudgeInfoController extends BaseController
     }
 
     /**
-     * 修改【请填写功能名称】
+     * 修改专家信息
      */
     @Log(title = "修改专家信息", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody JudgeInfo judgeInfo)
+    public AjaxResult edit(@RequestBody JudgeInfoBO judgeInfoBO)
     {
-        return toAjax(judgeInfoService.updateJudgeInfo(judgeInfo));
+        return toAjax(judgeInfoService.updateJudgeInfo(judgeInfoBO));
     }
 
     /**
-     * 删除【请填写功能名称】
+     * 删除专家信息
      */
     @Log(title = "删除专家信息", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
@@ -117,7 +117,7 @@ public class JudgeInfoController extends BaseController
     }
 
     @PostMapping("/importTemplate")
-    @Log(title = "下载导入专家信息模板", businessType = BusinessType.IMPORT)
+    @Log(title = "下载导入专家信息模板", businessType = BusinessType.EXPORT)
     public void importTemplate(HttpServletResponse response)
     {
         ExcelUtil<JudgeInfoBO> util = new ExcelUtil<JudgeInfoBO>(JudgeInfoBO.class);

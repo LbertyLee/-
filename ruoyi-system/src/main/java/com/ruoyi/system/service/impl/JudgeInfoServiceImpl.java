@@ -3,15 +3,20 @@ package com.ruoyi.system.service.impl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import cn.hutool.core.util.IdUtil;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.bean.BeanUtils;
 import com.ruoyi.common.utils.bean.BeanValidators;
+import com.ruoyi.system.domain.JudgeCategory;
 import com.ruoyi.system.domain.JudgeInfoCategory;
 import com.ruoyi.system.domain.bo.JudgeInfoBO;
+import com.ruoyi.system.domain.vo.JudgeInfoVo;
+import com.ruoyi.system.service.IJudgeCategoryService;
 import com.ruoyi.system.service.IJudgeInfoCategoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +47,8 @@ public class JudgeInfoServiceImpl implements IJudgeInfoService {
     protected Validator validator;
     @Autowired
     private IJudgeInfoCategoryService judgeInfoCategoryService;
+    @Autowired
+    private IJudgeCategoryService judgeCategoryService;
 
     /**
      * 查询【请填写功能名称】
@@ -67,6 +74,29 @@ public class JudgeInfoServiceImpl implements IJudgeInfoService {
 
     /**
      * 新增【请填写功能名称】
+     * @param judgeInfoBO
+     * @return
+     */
+    @Override
+    public List<JudgeInfo> selectJudgeInfoVOList(JudgeInfoBO judgeInfoBO) {
+        JudgeInfo judgeInfo = new JudgeInfo();
+        BeanUtils.copyBeanProp(judgeInfo, judgeInfoBO);
+        List<JudgeInfo> judgeInfos = judgeInfoMapper.selectJudgeInfoList(judgeInfo);
+        if(!StringUtils.isNull(judgeInfoBO.getJudgeCategory())){
+            ArrayList<Long> longs = new ArrayList<>();
+            for (Long l : extractNumbers(judgeInfoBO.getJudgeCategory())) {
+                List<JudgeInfoCategory> judgeInfoCategories = judgeInfoCategoryService.selectJudgeInfoCategoryByCategoryId(l);
+                judgeInfoCategories.stream().map(JudgeInfoCategory::getJudgeId).forEach(longs::add);
+            }
+            return judgeInfos.stream()
+                    .filter(judgeInfo1 -> longs.contains(judgeInfo1.getId())).collect(Collectors.toList());
+        }
+        return judgeInfos;
+
+    }
+
+    /**
+     * 新增【请填写功能名称】
      *
      * @param judgeInfo 【请填写功能名称】
      * @return 结果
@@ -80,13 +110,31 @@ public class JudgeInfoServiceImpl implements IJudgeInfoService {
     /**
      * 修改【请填写功能名称】
      *
-     * @param judgeInfo 【请填写功能名称】
+     * @param judgeInfoBO 【请填写功能名称】
      * @return 结果
      */
     @Override
-    public int updateJudgeInfo(JudgeInfo judgeInfo) {
+    @Transactional
+    public int updateJudgeInfo(JudgeInfoBO judgeInfoBO) {
+        JudgeInfo judgeInfo = new JudgeInfo();
+        BeanUtils.copyBeanProp(judgeInfo, judgeInfoBO);
         judgeInfo.setUpdateTime(DateUtils.getNowDate());
-        return judgeInfoMapper.updateJudgeInfo(judgeInfo);
+        judgeInfo.setUpdateBy(SecurityUtils.getUsername());
+        int i = judgeInfoMapper.updateJudgeInfo(judgeInfo);
+        //修改专家类别
+        if (!StringUtils.isNull(judgeInfoBO.getJudgeCategory())) {
+            //删除原来的类别
+            judgeInfoCategoryService.deleteJudgeInfoCategoryByJudgeId(judgeInfoBO.getId());
+            String judgeCategory = judgeInfoBO.getJudgeCategory();
+            List<Long> longs = extractNumbers(judgeCategory);
+            for (Long aLong : longs) {
+                JudgeInfoCategory judgeInfoCategory = new JudgeInfoCategory();
+                judgeInfoCategory.setJudgeId(judgeInfo.getId());
+                judgeInfoCategory.setCategoryId(aLong);
+                judgeInfoCategoryService.insertJudgeInfoCategory(judgeInfoCategory);
+            }
+        }
+        return i;
     }
 
     /**
@@ -163,7 +211,7 @@ public class JudgeInfoServiceImpl implements IJudgeInfoService {
                     }
                     successNum++;
                     successMsg.append("<br/>" + successNum + "、专家 " + judgeInfoBO.getJudgeName() + " 导入成功");
-                }else if (updateSupport) {
+                } else if (updateSupport) {
                     BeanValidators.validateWithException(validator, judgeInfoBO);
                     JudgeInfo judgeInfo = new JudgeInfo();
                     judgeInfo.setJudgeName(judgeInfoBO.getJudgeName());
@@ -175,8 +223,7 @@ public class JudgeInfoServiceImpl implements IJudgeInfoService {
                     judgeInfoMapper.updateJudgeInfo(judgeInfo);
                     successNum++;
                     successMsg.append("<br/>" + successNum + "、专家 " + judgeInfoBO.getJudgeName() + " 更新成功");
-                } else
-                {
+                } else {
                     failureNum++;
                     failureMsg.append("<br/>" + failureNum + "、专家 " + judgeInfoBO.getJudgeName() + " 已存在");
                 }
@@ -187,13 +234,10 @@ public class JudgeInfoServiceImpl implements IJudgeInfoService {
                 log.error(msg, e);
             }
         }
-        if (failureNum > 0)
-        {
+        if (failureNum > 0) {
             failureMsg.insert(0, "很抱歉，导入失败！共 " + failureNum + " 条数据格式不正确，错误如下：");
             throw new ServiceException(failureMsg.toString());
-        }
-        else
-        {
+        } else {
             successMsg.insert(0, "恭喜您，数据已全部导入成功！共 " + successNum + " 条，数据如下：");
         }
         return successMsg.toString();
@@ -201,6 +245,7 @@ public class JudgeInfoServiceImpl implements IJudgeInfoService {
 
     /**
      * 新增专家
+     *
      * @param judgeInfo
      * @return
      */
@@ -232,6 +277,32 @@ public class JudgeInfoServiceImpl implements IJudgeInfoService {
     @Override
     public List<JudgeInfo> selectJudgeInfoByIds(List<Long> collect) {
         return judgeInfoMapper.selectJudgeInfoByIds(collect);
+    }
+
+    /**
+     * 获取专家详情
+     * @param id
+     * @return
+     */
+    @Override
+    public JudgeInfoVo selectJudgeInfoVOById(Long id) {
+        JudgeInfo judgeInfo = judgeInfoMapper.selectJudgeInfoById(id);
+        JudgeInfoCategory judgeInfoCategory = new JudgeInfoCategory();
+        judgeInfoCategory.setJudgeId(id);
+        List<JudgeInfoCategory> judgeInfoCategoryList = judgeInfoCategoryService.selectJudgeInfoCategoryList(judgeInfoCategory);
+        //专家类别ids
+        JudgeInfoVo judgeInfoVo = new JudgeInfoVo();
+        judgeInfoVo.setJudgeName(judgeInfo.getJudgeName());
+        judgeInfoVo.setContactInformation(judgeInfo.getContactInformation());
+        judgeInfoVo.setWorkLocation(judgeInfo.getWorkLocation());
+        List<Long> collect = judgeInfoCategoryList.stream().map(JudgeInfoCategory::getCategoryId).collect(Collectors.toList());
+        ArrayList<JudgeCategory> judgeCategories = new ArrayList<>();
+        for (Long l : collect) {
+            JudgeCategory judgeCategory = judgeCategoryService.selectJudgeCategoryById(l);
+            judgeCategories.add(judgeCategory);
+        }
+        judgeInfoVo.setJudgeCategoryList(judgeCategories);
+        return judgeInfoVo;
     }
 
     public static List<Long> extractNumbers(String input) {

@@ -5,6 +5,7 @@ import java.util.List;
 import com.ruoyi.system.domain.JudgeInfo;
 import com.ruoyi.system.domain.ProjectInfo;
 import com.ruoyi.system.domain.vo.JudgeInfoVo;
+import com.ruoyi.system.domain.vo.ProjectInfoVo;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -23,7 +24,7 @@ public interface IProjectInfoService
      * @param id 【请填写功能名称】主键
      * @return 【请填写功能名称】
      */
-    public ProjectInfo selectProjectInfoById(Long id);
+    public ProjectInfoVo selectProjectInfoById(Long id);
 
     /**
      * 查询【请填写功能名称】列表
@@ -33,6 +34,8 @@ public interface IProjectInfoService
      */
     public List<ProjectInfo> selectProjectInfoList(ProjectInfo projectInfo);
 
+
+    List<ProjectInfo> selectProjectInVOfoList(ProjectInfo projectInfo);
     /**
      * 新增【请填写功能名称】
      * 
@@ -84,5 +87,6 @@ public interface IProjectInfoService
     String importData(MultipartFile file, boolean updateSupport, String operName);
 
     void download(HttpServletResponse response, ProjectInfo projectInfo);
+
 
 }

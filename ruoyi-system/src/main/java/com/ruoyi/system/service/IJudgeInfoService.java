@@ -3,6 +3,7 @@ package com.ruoyi.system.service;
 import java.util.List;
 import com.ruoyi.system.domain.JudgeInfo;
 import com.ruoyi.system.domain.bo.JudgeInfoBO;
+import com.ruoyi.system.domain.vo.JudgeInfoVo;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -28,7 +29,7 @@ public interface IJudgeInfoService
      * @return 【请填写功能名称】集合
      */
     public List<JudgeInfo> selectJudgeInfoList(JudgeInfo judgeInfo);
-
+    public  List<JudgeInfo> selectJudgeInfoVOList(JudgeInfoBO judgeInfoBO);
     /**
      * 新增【请填写功能名称】
      * 
@@ -43,7 +44,7 @@ public interface IJudgeInfoService
      * @param judgeInfo 【请填写功能名称】
      * @return 结果
      */
-    public int updateJudgeInfo(JudgeInfo judgeInfo);
+    public int updateJudgeInfo(JudgeInfoBO judgeInfo);
 
     /**
      * 批量删除【请填写功能名称】
@@ -78,4 +79,9 @@ public interface IJudgeInfoService
     int insertJudgeInfoBO(JudgeInfoBO judgeInfo);
 
     List<JudgeInfo> selectJudgeInfoByIds(List<Long> collect);
+
+
+    JudgeInfoVo selectJudgeInfoVOById(Long id);
+
+
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.system.domain.vo.ProjectInfoVo;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,20 +39,21 @@ public class ProjectInfoController extends BaseController
     private IProjectInfoService projectInfoService;
 
     /**
-     * 查询【请填写功能名称】列表
+     * 查询项目列表
      */
     @GetMapping("/list")
+    @Log(title = "查询项目列表", businessType = BusinessType.EXPORT)
     public TableDataInfo list(ProjectInfo projectInfo)
     {
         startPage();
-        List<ProjectInfo> list = projectInfoService.selectProjectInfoList(projectInfo);
+        List<ProjectInfo> list = projectInfoService.selectProjectInVOfoList(projectInfo);
         return getDataTable(list);
     }
 
     /**
-     * 导出【请填写功能名称】列表
+     * 导出项目列表
      */
-    @Log(title = "【请填写功能名称】", businessType = BusinessType.EXPORT)
+    @Log(title = "导出项目列表", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, ProjectInfo projectInfo)
     {
@@ -61,18 +63,19 @@ public class ProjectInfoController extends BaseController
     }
 
     /**
-     * 获取【请填写功能名称】详细信息
+     * 获取项目详细信息
      */
     @GetMapping(value = "/{id}")
+    @Log(title = "获取项目详细信息", businessType = BusinessType.EXPORT)
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
         return success(projectInfoService.selectProjectInfoById(id));
     }
 
     /**
-     * 新增【请填写功能名称】
+     * 新增项目
      */
-    @Log(title = "【请填写功能名称】", businessType = BusinessType.INSERT)
+    @Log(title = "新增项目", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody ProjectInfo projectInfo)
     {
@@ -80,9 +83,9 @@ public class ProjectInfoController extends BaseController
     }
 
     /**
-     * 修改【请填写功能名称】
+     * 修改项目
      */
-    @Log(title = "【请填写功能名称】", businessType = BusinessType.UPDATE)
+    @Log(title = "修改项目", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody ProjectInfo projectInfo)
     {
@@ -90,9 +93,9 @@ public class ProjectInfoController extends BaseController
     }
 
     /**
-     * 删除【请填写功能名称】
+     * 删除项目
      */
-    @Log(title = "【请填写功能名称】", businessType = BusinessType.DELETE)
+    @Log(title = "删除项目", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {
@@ -110,6 +113,7 @@ public class ProjectInfoController extends BaseController
      * 评委补录
      */
     @PostMapping("/supplemental")
+    @Log(title = "评委补录", businessType = BusinessType.INSERT)
     public AjaxResult supplementalJudge(@RequestBody ProjectInfo projectInfo){
         return success(projectInfoService.supplementalJudge(projectInfo));
     }

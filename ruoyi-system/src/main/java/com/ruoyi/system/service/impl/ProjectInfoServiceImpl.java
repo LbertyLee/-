@@ -12,6 +12,7 @@ import com.ruoyi.system.domain.JudgeInfo;
 import com.ruoyi.system.domain.JudgeInfoCategory;
 import com.ruoyi.system.domain.ProjectJudge;
 import com.ruoyi.system.domain.vo.JudgeInfoVo;
+import com.ruoyi.system.domain.vo.ProjectInfoVo;
 import com.ruoyi.system.service.IJudgeInfoCategoryService;
 import com.ruoyi.system.service.IJudgeInfoService;
 import com.ruoyi.system.service.IProjectJudgeService;
@@ -54,9 +55,21 @@ public class ProjectInfoServiceImpl implements IProjectInfoService
      * @return 【请填写功能名称】
      */
     @Override
-    public ProjectInfo selectProjectInfoById(Long id)
+    public ProjectInfoVo selectProjectInfoById(Long id)
     {
-        return projectInfoMapper.selectProjectInfoById(id);
+        ProjectInfoVo projectInfoVo = new ProjectInfoVo();
+        ProjectInfo projectInfo = projectInfoMapper.selectProjectInfoById(id);
+        BeanUtils.copyProperties(projectInfo,projectInfoVo);
+        ProjectJudge projectJudge1 = new ProjectJudge();
+        projectJudge1.setProjectId(id);
+        projectJudge1.setState(1);
+        List<ProjectJudge> projectJudges = projectJudgeService.selectProjectJudgeList(projectJudge1);
+        ArrayList<JudgeInfo> judgeInfos = new ArrayList<>();
+        for (ProjectJudge projectJudge : projectJudges) {
+            judgeInfos.add(judgeInfoService.selectJudgeInfoById(projectJudge.getJudgeId()));
+        }
+        projectInfoVo.setJudgeList(judgeInfos);
+        return projectInfoVo;
     }
 
     /**
@@ -69,6 +82,30 @@ public class ProjectInfoServiceImpl implements IProjectInfoService
     public List<ProjectInfo> selectProjectInfoList(ProjectInfo projectInfo)
     {
         return projectInfoMapper.selectProjectInfoList(projectInfo);
+    }
+
+    /**
+     * 查询项目列表
+     * @param projectInfo
+     * @return
+     */
+    @Override
+    public List<ProjectInfo> selectProjectInVOfoList(ProjectInfo projectInfo) {
+        List<ProjectInfo> projectInfoList = projectInfoMapper.selectProjectInfoList(projectInfo);
+//        ArrayList<ProjectInfoVo> projectInfoVos = new ArrayList<>();
+//        for (ProjectInfo info : projectInfoList) {
+//            ProjectInfoVo projectInfoVo = new ProjectInfoVo();
+//            BeanUtils.copyProperties(info,projectInfoVo);
+//            Long id = info.getId();
+//            List<ProjectJudge> projectJudges = projectJudgeService.selectProjectJudgeByProjectId(id);
+//            List<JudgeInfo> judgeInfos = new ArrayList<>();
+//            for (ProjectJudge projectJudge : projectJudges) {
+//                judgeInfos.add(judgeInfoService.selectJudgeInfoById(projectJudge.getJudgeId()));
+//            }
+//            projectInfoVo.setJudgeList(judgeInfos);
+//            projectInfoVos.add(projectInfoVo);
+//        }
+        return projectInfoList;
     }
 
     /**

@@ -1,6 +1,9 @@
 package com.ruoyi.system.domain.vo;
 
 import com.ruoyi.common.annotation.Excel;
+import com.ruoyi.system.domain.JudgeCategory;
+
+import java.util.List;
 
 public class JudgeInfoVo {
     /** $column.columnComment */
@@ -21,6 +24,17 @@ public class JudgeInfoVo {
     private Integer status;
     /**备注*/
     private String remark;
+
+    /**专家类别*/
+    private List<JudgeCategory> judgeCategoryList;
+
+    public List<JudgeCategory> getJudgeCategoryList() {
+        return judgeCategoryList;
+    }
+
+    public void setJudgeCategoryList(List<JudgeCategory> judgeCategoryList) {
+        this.judgeCategoryList = judgeCategoryList;
+    }
 
     public String getRemark() {
         return remark;

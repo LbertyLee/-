@@ -35,10 +35,11 @@ public class JudgeInfoCategoryController extends BaseController
     private IJudgeInfoCategoryService judgeInfoCategoryService;
 
     /**
-     * 查询【请填写功能名称】列表
+     * 查询专家分类列表
      */
     @PreAuthorize("@ss.hasPermi('system:category:list')")
     @GetMapping("/list")
+    @Log(title = "专家分类列表", businessType = BusinessType.OTHER)
     public TableDataInfo list(JudgeInfoCategory judgeInfoCategory)
     {
         startPage();
@@ -47,10 +48,10 @@ public class JudgeInfoCategoryController extends BaseController
     }
 
     /**
-     * 导出【请填写功能名称】列表
+     * 导出【专家分类】列表
      */
     @PreAuthorize("@ss.hasPermi('system:category:export')")
-    @Log(title = "【请填写功能名称】", businessType = BusinessType.EXPORT)
+    @Log(title = "导出【专家分类】列表", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, JudgeInfoCategory judgeInfoCategory)
     {
@@ -60,20 +61,21 @@ public class JudgeInfoCategoryController extends BaseController
     }
 
     /**
-     * 获取【请填写功能名称】详细信息
+     * 获取专家分类详细信息
      */
     @PreAuthorize("@ss.hasPermi('system:category:query')")
     @GetMapping(value = "/{judgeId}")
+    @Log(title = "获取专家分类详细信息", businessType = BusinessType.EXPORT)
     public AjaxResult getInfo(@PathVariable("judgeId") Long judgeId)
     {
         return success(judgeInfoCategoryService.selectJudgeInfoCategoryByJudgeId(judgeId));
     }
 
     /**
-     * 新增【请填写功能名称】
+     * 新增专家分类
      */
     @PreAuthorize("@ss.hasPermi('system:category:add')")
-    @Log(title = "【请填写功能名称】", businessType = BusinessType.INSERT)
+    @Log(title = "新增专家分类", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody JudgeInfoCategory judgeInfoCategory)
     {
@@ -81,10 +83,10 @@ public class JudgeInfoCategoryController extends BaseController
     }
 
     /**
-     * 修改【请填写功能名称】
+     * 修改专家分类
      */
     @PreAuthorize("@ss.hasPermi('system:category:edit')")
-    @Log(title = "【请填写功能名称】", businessType = BusinessType.UPDATE)
+    @Log(title = "修改专家分类", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody JudgeInfoCategory judgeInfoCategory)
     {
@@ -92,10 +94,10 @@ public class JudgeInfoCategoryController extends BaseController
     }
 
     /**
-     * 删除【请填写功能名称】
+     * 删除专家分类
      */
     @PreAuthorize("@ss.hasPermi('system:category:remove')")
-    @Log(title = "【请填写功能名称】", businessType = BusinessType.DELETE)
+    @Log(title = "删除专家分类", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{judgeIds}")
     public AjaxResult remove(@PathVariable Long[] judgeIds)
     {

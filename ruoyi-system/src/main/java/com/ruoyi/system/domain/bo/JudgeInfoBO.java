@@ -3,6 +3,10 @@ package com.ruoyi.system.domain.bo;
 import com.ruoyi.common.annotation.Excel;
 
 public class JudgeInfoBO {
+
+    /**专家id*/
+    @Excel(name = "专家id")
+    private Long id;
     /** 专家名称 */
     @Excel(name = "专家名称")
     private String judgeName;
@@ -18,6 +22,14 @@ public class JudgeInfoBO {
     /**专业类别*/
     @Excel(name = "专业类别[1,2,3,4]，请查看系统")
     private String judgeCategory;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getJudgeName() {
         return judgeName;

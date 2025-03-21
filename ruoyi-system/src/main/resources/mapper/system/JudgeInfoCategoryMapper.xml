@@ -17,7 +17,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectJudgeInfoCategoryList" parameterType="JudgeInfoCategory" resultMap="JudgeInfoCategoryResult">
         <include refid="selectJudgeInfoCategoryVo"/>
-        <where>  
+        <where>
+            <if test="judgeId != null "> and judge_id = #{judgeId}</if>
+             <if test="categoryId != null "> and category_id = #{categoryId}</if>
         </where>
     </select>
     

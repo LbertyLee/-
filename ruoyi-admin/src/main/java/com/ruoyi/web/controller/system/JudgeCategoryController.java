@@ -38,6 +38,7 @@ public class JudgeCategoryController extends BaseController
      * 查询专家类别列表
      */
     @GetMapping("/list")
+    @Log(title = "查询专家类别", businessType = BusinessType.EXPORT)
     public TableDataInfo list(JudgeCategory judgeCategory)
     {
         startPage();
@@ -48,7 +49,7 @@ public class JudgeCategoryController extends BaseController
     /**
      * 导出专家类别列表
      */
-    @Log(title = "专家类别", businessType = BusinessType.EXPORT)
+    @Log(title = "导出专家类别列表", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, JudgeCategory judgeCategory)
     {
@@ -60,6 +61,7 @@ public class JudgeCategoryController extends BaseController
     /**
      * 获取专家类别详细信息
      */
+    @Log(title = "查询专家类别", businessType = BusinessType.EXPORT)
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
