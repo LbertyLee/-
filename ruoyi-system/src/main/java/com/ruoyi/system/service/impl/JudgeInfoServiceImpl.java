@@ -151,7 +151,7 @@ public class JudgeInfoServiceImpl implements IJudgeInfoService {
                     judgeInfo.setWorkLocation(judgeInfoBO.getWorkLocation());
                     judgeInfo.setCreateTime(DateUtils.getNowDate());
                     judgeInfo.setCreateBy(operName);
-                    judgeInfo.setId(IdUtil.getSnowflakeNextId());
+//                    judgeInfo.setId(IdUtil.getSnowflakeNextId());
                     judgeInfoMapper.insertJudgeInfo(judgeInfo);
                     //新增专家类别关联表
                     for (Long aLong : longs) {
@@ -215,8 +215,9 @@ public class JudgeInfoServiceImpl implements IJudgeInfoService {
         judgeInfo1.setWorkLocation(judgeInfo.getWorkLocation());
         judgeInfo1.setCreateTime(DateUtils.getNowDate());
         judgeInfo1.setCreateBy(SecurityUtils.getUsername());
-        judgeInfo1.setId(IdUtil.getSnowflakeNextId());
+//        judgeInfo1.setId(IdUtil.getSnowflakeNextId());
         int insert = judgeInfoMapper.insertJudgeInfo(judgeInfo1);
+//        Long id = judgeInfo1.getId();
         for (Long aLong : longs) {
             JudgeInfoCategory judgeInfoCategory = new JudgeInfoCategory();
             judgeInfoCategory.setJudgeId(judgeInfo1.getId());

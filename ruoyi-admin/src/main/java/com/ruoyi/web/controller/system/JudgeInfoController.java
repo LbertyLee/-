@@ -40,8 +40,9 @@ public class JudgeInfoController extends BaseController
     private IJudgeInfoService judgeInfoService;
 
     /**
-     * 查询【请填写功能名称】列表
+     * 查询专家信息列表
      */
+    @Log(title = "【请填写功能名称】", businessType = BusinessType.EXPORT)
     @GetMapping("/list")
     public TableDataInfo list(JudgeInfo judgeInfo)
     {
@@ -51,10 +52,10 @@ public class JudgeInfoController extends BaseController
     }
 
     /**
-     * 导出【请填写功能名称】列表
+     * 导出专家信息列表
      */
     @PreAuthorize("@ss.hasPermi('system:info:export')")
-    @Log(title = "【请填写功能名称】", businessType = BusinessType.EXPORT)
+    @Log(title = "专家信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, JudgeInfo judgeInfo)
     {
@@ -64,8 +65,9 @@ public class JudgeInfoController extends BaseController
     }
 
     /**
-     * 获取【请填写功能名称】详细信息
+     * 获取专家信息详细信息
      */
+    @Log(title = "获取专家信息", businessType = BusinessType.EXPORT)
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
@@ -73,9 +75,9 @@ public class JudgeInfoController extends BaseController
     }
 
     /**
-     * 新增【请填写功能名称】
+     * 新增专家信息
      */
-    @Log(title = "【请填写功能名称】", businessType = BusinessType.INSERT)
+    @Log(title = "新增专家信息", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody JudgeInfoBO judgeInfo)
     {
@@ -85,7 +87,7 @@ public class JudgeInfoController extends BaseController
     /**
      * 修改【请填写功能名称】
      */
-    @Log(title = "【请填写功能名称】", businessType = BusinessType.UPDATE)
+    @Log(title = "修改专家信息", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody JudgeInfo judgeInfo)
     {
@@ -95,7 +97,7 @@ public class JudgeInfoController extends BaseController
     /**
      * 删除【请填写功能名称】
      */
-    @Log(title = "【请填写功能名称】", businessType = BusinessType.DELETE)
+    @Log(title = "删除专家信息", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long ids)
     {
@@ -105,6 +107,7 @@ public class JudgeInfoController extends BaseController
      * 批量导入专家信息
      */
     @PostMapping("/importData")
+    @Log(title = "批量导入专家信息", businessType = BusinessType.IMPORT)
     public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception{
         ExcelUtil<JudgeInfoBO> util = new ExcelUtil<JudgeInfoBO>(JudgeInfoBO.class);
         List<JudgeInfoBO> userList = util.importExcel(file.getInputStream());
@@ -114,6 +117,7 @@ public class JudgeInfoController extends BaseController
     }
 
     @PostMapping("/importTemplate")
+    @Log(title = "下载导入专家信息模板", businessType = BusinessType.IMPORT)
     public void importTemplate(HttpServletResponse response)
     {
         ExcelUtil<JudgeInfoBO> util = new ExcelUtil<JudgeInfoBO>(JudgeInfoBO.class);

@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+import org.springframework.data.annotation.Id;
 
 /**
  * 【请填写功能名称】对象 project_info
@@ -18,6 +19,7 @@ public class ProjectInfo extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** id */
+    @Id
     private Long id;
 
     /** 项目名称 */

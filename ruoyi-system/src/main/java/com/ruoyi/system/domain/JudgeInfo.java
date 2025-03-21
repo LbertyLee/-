@@ -4,6 +4,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+import org.springframework.data.annotation.Id;
 
 /**
  * 【请填写功能名称】对象 judge_info
@@ -16,6 +17,7 @@ public class JudgeInfo extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** $column.columnComment */
+    @Id
     private Long id;
 
     /** 专家名称 */

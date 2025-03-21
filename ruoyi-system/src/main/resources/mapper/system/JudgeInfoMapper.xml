@@ -50,7 +50,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
 
-    <insert id="insertJudgeInfo" parameterType="JudgeInfo">
+    <insert id="insertJudgeInfo" parameterType="JudgeInfo" useGeneratedKeys="true" keyProperty="id">
         insert into judge_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">id,</if>

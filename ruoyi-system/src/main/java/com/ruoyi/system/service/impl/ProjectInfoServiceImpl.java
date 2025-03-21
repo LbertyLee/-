@@ -84,7 +84,7 @@ public class ProjectInfoServiceImpl implements IProjectInfoService
         //项目于基础信息
         projectInfo.setCreateTime(DateUtils.getNowDate());
         projectInfo.setCreateBy(SecurityUtils.getLoginUser().getUserId().toString());
-        projectInfo.setId(IdUtil.getSnowflakeNextId());
+//        projectInfo.setId(IdUtil.getSnowflakeNextId());
         projectInfoMapper.insertProjectInfo(projectInfo);
         //盲选评委
         String categorys = projectInfo.getCategorys();

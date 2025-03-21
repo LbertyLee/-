@@ -2,6 +2,7 @@ package com.ruoyi.system.service.impl;
 
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.mapper.JudgeCategoryMapper;
@@ -53,6 +54,7 @@ public class JudgeCategoryServiceImpl implements IJudgeCategoryService
     @Override
     public int insertJudgeCategory(JudgeCategory judgeCategory)
     {
+        judgeCategory.setCreateBy(SecurityUtils.getUsername());
         judgeCategory.setCreateTime(DateUtils.getNowDate());
         return judgeCategoryMapper.insertJudgeCategory(judgeCategory);
     }
