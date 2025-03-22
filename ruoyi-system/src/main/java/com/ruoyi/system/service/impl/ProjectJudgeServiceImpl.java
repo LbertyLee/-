@@ -1,5 +1,6 @@
 package com.ruoyi.system.service.impl;
 
+import java.util.Collections;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -89,5 +90,10 @@ public class ProjectJudgeServiceImpl implements IProjectJudgeService
     public int deleteProjectJudgeByProjectId(Long projectId)
     {
         return projectJudgeMapper.deleteProjectJudgeByProjectId(projectId);
+    }
+
+    @Override
+    public List<ProjectJudge> selectProjectAllJudgeList(ProjectJudge projectJudge) {
+        return projectJudgeMapper.selectProjectAllJudgeList(projectJudge);
     }
 }

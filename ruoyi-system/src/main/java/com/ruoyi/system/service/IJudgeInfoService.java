@@ -29,6 +29,7 @@ public interface IJudgeInfoService
      * @return 【请填写功能名称】集合
      */
     public List<JudgeInfo> selectJudgeInfoList(JudgeInfo judgeInfo);
+//    public  List<JudgeInfoVo> selectJudgeInfoVOList(JudgeInfoBO judgeInfoBO);
     public  List<JudgeInfo> selectJudgeInfoVOList(JudgeInfoBO judgeInfoBO);
     /**
      * 新增【请填写功能名称】

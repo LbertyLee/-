@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.system.domain.ProjectInfo;
 import com.ruoyi.system.domain.bo.JudgeInfoBO;
+import com.ruoyi.system.domain.vo.JudgeInfoVo;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,6 +48,7 @@ public class JudgeInfoController extends BaseController
     public TableDataInfo list(JudgeInfoBO judgeInfoBO)
     {
         startPage();
+//        List<JudgeInfoVo> list = judgeInfoService.selectJudgeInfoVOList(judgeInfoBO);
         List<JudgeInfo> list = judgeInfoService.selectJudgeInfoVOList(judgeInfoBO);
         return getDataTable(list);
     }

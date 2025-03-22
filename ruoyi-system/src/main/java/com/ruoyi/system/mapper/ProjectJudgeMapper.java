@@ -26,7 +26,7 @@ public interface ProjectJudgeMapper
      * @return 【请填写功能名称】集合
      */
     public List<ProjectJudge> selectProjectJudgeList(ProjectJudge projectJudge);
-
+    List<ProjectJudge> selectProjectAllJudgeList(ProjectJudge projectJudge);
     /**
      * 新增【请填写功能名称】
      * 
@@ -58,4 +58,6 @@ public interface ProjectJudgeMapper
      * @return 结果
      */
     public int deleteProjectJudgeByProjectIds(Long[] projectIds);
+
+
 }

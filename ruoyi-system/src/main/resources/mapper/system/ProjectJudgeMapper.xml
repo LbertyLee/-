@@ -29,6 +29,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where project_id = #{projectId}
     </select>
 
+    <select id="selectProjectAllJudgeList" parameterType="ProjectJudge" resultMap="ProjectJudgeResult">
+        <include refid="selectProjectJudgeVo"/>
+        <where>
+            <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
+            <if test="projectId != null  and projectId != ''"> and project_id = #{projectId}</if>
+        </where>
+    </select>
+
     <insert id="insertProjectJudge" parameterType="ProjectJudge">
         insert into project_judge
         <trim prefix="(" suffix=")" suffixOverrides=",">

@@ -74,25 +74,69 @@ public class JudgeInfoServiceImpl implements IJudgeInfoService {
 
     /**
      * 新增【请填写功能名称】
+     *
      * @param judgeInfoBO
      * @return
      */
+//    @Override
+//    public List<JudgeInfoVo> selectJudgeInfoVOList(JudgeInfoBO judgeInfoBO) {
+//        JudgeInfo judgeInfo = new JudgeInfo();
+//        BeanUtils.copyBeanProp(judgeInfo, judgeInfoBO);
+//        List<JudgeInfo> judgeInfos = judgeInfoMapper.selectJudgeInfoList(judgeInfo);
+//        if (!StringUtils.isNull(judgeInfoBO.getJudgeCategory())) {
+//            ArrayList<Long> longs = new ArrayList<>();
+//            for (Long l : extractNumbers(judgeInfoBO.getJudgeCategory())) {
+//                List<JudgeInfoCategory> judgeInfoCategories = judgeInfoCategoryService.selectJudgeInfoCategoryByCategoryId(l);
+//                judgeInfoCategories.stream().map(JudgeInfoCategory::getJudgeId).forEach(longs::add);
+//            }
+//            return judgeInfos.stream()
+//                    .filter(judgeInfo1 -> longs.contains(judgeInfo1.getId()))
+//                    .map(judgeInfo1 -> {
+//                        JudgeInfoVo judgeInfoVo = new JudgeInfoVo();
+//                        BeanUtils.copyBeanProp(judgeInfoVo, judgeInfo1);
+//                        judgeInfoVo.setJudgeCategoryList(extractNumbers(judgeInfo1));
+//                        return judgeInfoVo;
+//                    })
+//                    .collect(Collectors.toList());
+//        }
+//        return judgeInfos.stream().map(judgeInfo1 -> {
+//            JudgeInfoVo judgeInfoVo = new JudgeInfoVo();
+//            BeanUtils.copyBeanProp(judgeInfoVo, judgeInfo1);
+//            judgeInfoVo.setJudgeCategoryList(extractNumbers(judgeInfo1));
+//            return judgeInfoVo;
+//        }).collect(Collectors.toList());
+//
+//    }
     @Override
     public List<JudgeInfo> selectJudgeInfoVOList(JudgeInfoBO judgeInfoBO) {
         JudgeInfo judgeInfo = new JudgeInfo();
         BeanUtils.copyBeanProp(judgeInfo, judgeInfoBO);
         List<JudgeInfo> judgeInfos = judgeInfoMapper.selectJudgeInfoList(judgeInfo);
-        if(!StringUtils.isNull(judgeInfoBO.getJudgeCategory())){
+        if (!StringUtils.isNull(judgeInfoBO.getJudgeCategory())) {
             ArrayList<Long> longs = new ArrayList<>();
             for (Long l : extractNumbers(judgeInfoBO.getJudgeCategory())) {
                 List<JudgeInfoCategory> judgeInfoCategories = judgeInfoCategoryService.selectJudgeInfoCategoryByCategoryId(l);
                 judgeInfoCategories.stream().map(JudgeInfoCategory::getJudgeId).forEach(longs::add);
             }
             return judgeInfos.stream()
-                    .filter(judgeInfo1 -> longs.contains(judgeInfo1.getId())).collect(Collectors.toList());
+                    .filter(judgeInfo1 -> longs.contains(judgeInfo1.getId()))
+                    .collect(Collectors.toList());
         }
         return judgeInfos;
 
+    }
+
+    /**
+     * 获取专家类别
+     */
+    private List<JudgeCategory> extractNumbers(JudgeInfo judgeInfo) {
+        JudgeInfoCategory judgeInfoCategory = new JudgeInfoCategory();
+        judgeInfoCategory.setJudgeId(judgeInfo.getId());
+        List<JudgeInfoCategory> judgeInfoCategories = judgeInfoCategoryService.selectJudgeInfoCategoryList(judgeInfoCategory);
+        List<Long> CategoriesList = judgeInfoCategories.stream().map(JudgeInfoCategory::getCategoryId).collect(Collectors.toList());
+        return CategoriesList.stream().map(b -> {
+            return judgeCategoryService.selectJudgeCategoryById(b);
+        }).collect(Collectors.toList());
     }
 
     /**
@@ -281,6 +325,7 @@ public class JudgeInfoServiceImpl implements IJudgeInfoService {
 
     /**
      * 获取专家详情
+     *
      * @param id
      * @return
      */
@@ -292,6 +337,7 @@ public class JudgeInfoServiceImpl implements IJudgeInfoService {
         List<JudgeInfoCategory> judgeInfoCategoryList = judgeInfoCategoryService.selectJudgeInfoCategoryList(judgeInfoCategory);
         //专家类别ids
         JudgeInfoVo judgeInfoVo = new JudgeInfoVo();
+        judgeInfoVo.setId(judgeInfo.getId());
         judgeInfoVo.setJudgeName(judgeInfo.getJudgeName());
         judgeInfoVo.setContactInformation(judgeInfo.getContactInformation());
         judgeInfoVo.setWorkLocation(judgeInfo.getWorkLocation());

@@ -58,4 +58,6 @@ public interface IProjectJudgeService
      * @return 结果
      */
     public int deleteProjectJudgeByProjectId(Long projectId);
+
+    List<ProjectJudge> selectProjectAllJudgeList(ProjectJudge projectJudge);
 }

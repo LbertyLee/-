@@ -120,7 +120,7 @@ public class ProjectInfoServiceImpl implements IProjectInfoService
     {
         //项目于基础信息
         projectInfo.setCreateTime(DateUtils.getNowDate());
-        projectInfo.setCreateBy(SecurityUtils.getLoginUser().getUserId().toString());
+        projectInfo.setCreateBy(SecurityUtils.getUsername());
 //        projectInfo.setId(IdUtil.getSnowflakeNextId());
         projectInfoMapper.insertProjectInfo(projectInfo);
         //盲选评委
@@ -248,7 +248,7 @@ public class ProjectInfoServiceImpl implements IProjectInfoService
         //查询出现有评委id
         ProjectJudge projectJudge = new ProjectJudge();
         projectJudge.setProjectId(projectInfo.getId());
-        List<ProjectJudge> projectJudges = projectJudgeService.selectProjectJudgeList(projectJudge);
+        List<ProjectJudge> projectJudges = projectJudgeService.selectProjectAllJudgeList(projectJudge);
         // 现有评委id集合
         List<Long> collect = projectJudges.stream().map(ProjectJudge::getJudgeId).collect(Collectors.toList());
         Set<Long> collectSet = new HashSet<>(collect); // 转换为 Set 方便快速查找
