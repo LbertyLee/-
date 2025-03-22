@@ -23,8 +23,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectJudgeInfoVo"/>
         <where>  
             <if test="judgeName != null  and judgeName != ''"> and judge_name like concat('%', #{judgeName}, '%')</if>
-            <if test="workLocation != null  and workLocation != ''"> and work_location = #{workLocation}</if>
-            <if test="contactInformation != null  and contactInformation != ''"> and contact_information = #{contactInformation}</if>
+            <if test="workLocation != null  and workLocation != ''"> and work_location like concat('%', #{workLocation}, '%')</if>
+            <if test="contactInformation != null  and contactInformation != ''"> and contact_information like concat('%', #{contactInformation}, '%')</if>
         </where>
     </select>
 
