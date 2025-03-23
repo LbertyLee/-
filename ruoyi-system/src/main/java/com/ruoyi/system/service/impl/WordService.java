@@ -24,14 +24,14 @@ public class WordService {
             titleParagraph.setAlignment(ParagraphAlignment.CENTER);
             XWPFRun titleRun = titleParagraph.createRun();
             //项目名称
-            String projectName=projectInfo.getProjectName();
-            titleRun.setText(projectName+" 确认书");
+            String projectName = projectInfo.getProjectName();
+            titleRun.setText(projectName + " 确认书");
             titleRun.setFontSize(16);
             titleRun.setBold(true);
             //专家个数
             int expertCount = judgeInfoVos.size();
             //总行数
-            int totalRows = 6+expertCount;
+            int totalRows = 6 + expertCount;
             // 创建表格
             XWPFTable table = document.createTable(totalRows, 5);
 
@@ -68,40 +68,40 @@ public class WordService {
             row3.getCell(4).setText("是否补录");
             // 设置专家信息
             for (int i = 0; i < expertCount; i++) {
-                XWPFTableRow row = table.getRow(4+i);
+                XWPFTableRow row = table.getRow(4 + i);
                 JudgeInfoVo judgeInfoVo = judgeInfoVos.get(i);
                 row.getCell(0).setText(judgeInfoVo.getJudgeName());
                 row.getCell(1).setText(judgeInfoVo.getWorkLocation());
                 row.getCell(2).setText(judgeInfoVo.getContactInformation());
-                row.getCell(3).setText(judgeInfoVo.getStatus()==1?"是":"否");
+                row.getCell(3).setText(judgeInfoVo.getStatus() == 1 ? "是" : "否");
                 row.getCell(4).setText(judgeInfoVo.getRemark());
             }
-            int signatureStartRow = totalRows-2;
+            int signatureStartRow = totalRows - 2;
 
             // 抽取人签名
             XWPFTableRow signRow1 = table.getRow(signatureStartRow);
             signRow1.getCell(0).setText("抽取人签名：");
-            mergeCellsHorizontal(table, signatureStartRow, 0, 2);
-            signRow1.getCell(3).setText("单位负责人签名：");
-            mergeCellsHorizontal(table, signatureStartRow, 3, 4);
+            mergeCellsHorizontal(table, signatureStartRow, 0, 1);
+            signRow1.getCell(2).setText("单位负责人签名：");
+            mergeCellsHorizontal(table, signatureStartRow, 2, 4);
             // 参与人员签名
-            XWPFTableRow signRow2 = table.getRow(signatureStartRow+1);
+            XWPFTableRow signRow2 = table.getRow(signatureStartRow + 1);
             signRow2.getCell(0).setText("参与人员签名：");
-            mergeCellsHorizontal(table, signatureStartRow+1, 0, 2);
-            signRow2.getCell(3).setText("单位组织签名：");
-            mergeCellsHorizontal(table, signatureStartRow+1, 3, 4);
+            mergeCellsHorizontal(table, signatureStartRow + 1, 0, 1);
+            signRow2.getCell(2).setText("单位组织签名：");
+            mergeCellsHorizontal(table, signatureStartRow + 1, 2, 4);
 
             // 设置表格样式
             setTableStyle(table);
             // 保存文档
             try {
                 // 生成文件名（防止特殊字符影响文件名，可以替换掉特殊字符）
-                String fileName =  projectName.replaceAll("[^a-zA-Z0-9\\u4e00-\\u9fa5]", "") + ".docx";
+                String fileName = projectName.replaceAll("[^a-zA-Z0-9\\u4e00-\\u9fa5]", "") + ".docx";
                 response.setContentType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
                 response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
                 document.write(response.getOutputStream());
                 response.getOutputStream().flush();
-            }catch (Exception e){
+            } catch (Exception e) {
                 throw new RuntimeException("导出失败");
             }
         } catch (Exception e) {
@@ -120,6 +120,7 @@ public class WordService {
             }
         }
     }
+
     // 合并垂直单元格的辅助方法
     private void mergeCellsVertical(XWPFTable table, int col, int fromRow, int toRow) {
         for (int rowIndex = fromRow; rowIndex <= toRow; rowIndex++) {
@@ -148,23 +149,45 @@ public class WordService {
                 // 抽取人签名 & 参与人员签名行设置更大高度
                 row.setHeight(3000);
             } else {
-                row.setHeight(800);
+                row.setHeight(600);
             }
         }
 
         // 设置单元格样式
-        for (XWPFTableRow row : table.getRows()) {
+        for (int i = 0; i < table.getRows().size(); i++) {
+            XWPFTableRow row = table.getRow(i);
             for (XWPFTableCell cell : row.getTableCells()) {
-                cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.TOP); // 使文本靠上
-
                 XWPFParagraph paragraph = cell.getParagraphs().get(0);
-                if (cell.getText().contains("签名")) {
-                    paragraph.setAlignment(ParagraphAlignment.RIGHT); // 靠右对齐
-                    paragraph.setIndentationRight(200); // 增加右侧缩进
+                if (i == signatureStartRow || i == signatureStartRow + 1) {
+                    paragraph.setAlignment(ParagraphAlignment.LEFT); // 水平居中
+                    cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.TOP); // 仅对倒数第二行生效
                 } else {
+                    // 其他行的单元格：垂直居中，水平居中
                     paragraph.setAlignment(ParagraphAlignment.CENTER);
+                    cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
                 }
             }
+        }
+        // 设置倒数第一行和倒数第二行的单元格宽度
+        setSignatureRowColumnWidths(table, signatureStartRow);
+    }
+
+    private void setSignatureRowColumnWidths(XWPFTable table, int signatureStartRow) {
+        // 获取倒数第一行和倒数第二行的列数
+        XWPFTableRow signRow1 = table.getRow(signatureStartRow);
+        XWPFTableRow signRow2 = table.getRow(signatureStartRow + 1);
+        int totalColumns = signRow1.getTableCells().size();
+
+        // 设置倒数第一行和倒数第二行的每个单元格的宽度（平均分配）
+        for (int i = 0; i < totalColumns; i++) {
+            // 获取这两行的单元格
+            XWPFTableCell cell1 = signRow1.getCell(i);
+            XWPFTableCell cell2 = signRow2.getCell(i);
+
+            // 设置单元格宽度，这里假设宽度为固定值，根据需要调整
+            String width = "7000"; // 设置宽度为1800（可以调整）
+            cell1.getCTTc().getTcPr().addNewTcW().setW(new BigInteger(width));
+            cell2.getCTTc().getTcPr().addNewTcW().setW(new BigInteger(width));
         }
     }
 
