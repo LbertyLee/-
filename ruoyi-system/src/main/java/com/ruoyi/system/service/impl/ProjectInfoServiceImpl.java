@@ -16,6 +16,7 @@ import com.ruoyi.system.domain.vo.ProjectInfoVo;
 import com.ruoyi.system.service.IJudgeInfoCategoryService;
 import com.ruoyi.system.service.IJudgeInfoService;
 import com.ruoyi.system.service.IProjectJudgeService;
+import com.ruoyi.system.utils.PdfUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -326,6 +327,7 @@ public class ProjectInfoServiceImpl implements IProjectInfoService
             judgeInfoVo.setRemark(projectJudge1.getRemarks());
             judgeInfoVos.add(judgeInfoVo);
         }
-        wordService.createWordDocument(response,projectInfo1,judgeInfoVos);
+//        wordService.createWordDocument(response,projectInfo1,judgeInfoVos);
+        PdfUtils.createPdf(response,projectInfo1,judgeInfoVos);
     }
 }

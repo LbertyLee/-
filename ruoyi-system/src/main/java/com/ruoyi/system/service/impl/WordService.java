@@ -2,13 +2,14 @@ package com.ruoyi.system.service.impl;
 
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.system.domain.ProjectInfo;
-import com.ruoyi.system.domain.ProjectJudge;
 import com.ruoyi.system.domain.vo.JudgeInfoVo;
 import org.apache.poi.xwpf.usermodel.*;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.math.BigInteger;
 import java.net.URLEncoder;
@@ -95,6 +96,7 @@ public class WordService {
             setTableStyle(table);
             // 保存文档
             try {
+
                 // 生成文件名（防止特殊字符影响文件名，可以替换掉特殊字符）
                 String fileName = projectName.replaceAll("[^a-zA-Z0-9\\u4e00-\\u9fa5]", "") + ".docx";
                 response.setContentType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
